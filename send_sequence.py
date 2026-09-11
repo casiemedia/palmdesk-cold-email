@@ -77,7 +77,11 @@ def due(lead, now):
     return (now - last_sent).days >= gap_days
 
 
-def send_email(smtp, lead, subject, body):
+def send_email(lead, subject, body):
+    """Opens its own fresh SMTP connection per email. Hostinger drops idle
+    connections faster than our inter-send pacing delay, so a single shared
+    connection across the whole batch dies partway through and poisons every
+    send after it — reconnecting per email avoids that entirely."""
     msg = MIMEText(body, "plain", "utf-8")
     msg["Subject"] = subject
     msg["From"] = f"{FROM_NAME} <{SMTP_USER}>"
@@ -91,7 +95,9 @@ def send_email(smtp, lead, subject, body):
         msg["In-Reply-To"] = thread_id
         msg["References"] = thread_id
 
-    smtp.sendmail(SMTP_USER, [lead["email"]], msg.as_string())
+    with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, timeout=30) as smtp:
+        smtp.login(SMTP_USER, SMTP_PASS)
+        smtp.sendmail(SMTP_USER, [lead["email"]], msg.as_string())
     return msg["Message-ID"]
 
 
@@ -102,36 +108,34 @@ def main():
     now = datetime.now(timezone.utc)
     sent_count = 0
 
-    with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT) as smtp:
-        smtp.login(SMTP_USER, SMTP_PASS)
+    for lead in leads:
+        if sent_count >= MAX_SENDS_PER_RUN:
+            break
+        if lead.get("status") != "active":
+            continue
+        if not due(lead, now):
+            continue
 
-        for lead in leads:
-            if sent_count >= MAX_SENDS_PER_RUN:
-                break
-            if lead.get("status") != "active":
-                continue
-            if not due(lead, now):
-                continue
+        subject, body = step_content(lead["step"], lead)
+        if subject is None:
+            continue
 
-            subject, body = step_content(lead["step"], lead)
-            if subject is None:
-                continue
+        try:
+            message_id = send_email(lead, subject, body)
+        except Exception as e:
+            print(f"FAILED to send to {lead['email']}: {e}", file=sys.stderr, flush=True)
+            continue
 
-            try:
-                message_id = send_email(smtp, lead, subject, body)
-            except Exception as e:
-                print(f"FAILED to send to {lead['email']}: {e}", file=sys.stderr)
-                continue
+        if lead["step"] == 0:
+            lead["thread_message_id"] = message_id
+        lead["last_sent_at"] = now.isoformat()
+        lead["step"] += 1
+        sent_count += 1
+        print(f"Sent step {lead['step']} to {lead['email']}", flush=True)
 
-            if lead["step"] == 0:
-                lead["thread_message_id"] = message_id
-            lead["last_sent_at"] = now.isoformat()
-            lead["step"] += 1
-            sent_count += 1
-            print(f"Sent step {lead['step']} to {lead['email']}")
-
-            # gentle pacing between sends
-            time.sleep(random.uniform(20, 60))
+        # gentle pacing between sends (each send opens its own fresh connection,
+        # so a longer gap here is safe now — it no longer risks an idle timeout)
+        time.sleep(random.uniform(20, 60))
 
     with open(LEADS_PATH, "w", encoding="utf-8") as f:
         json.dump(leads, f, indent=2)

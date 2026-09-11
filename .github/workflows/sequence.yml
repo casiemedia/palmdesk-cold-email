@@ -1,0 +1,45 @@
+name: Cold email sequence
+
+on:
+  schedule:
+    # 14:00 UTC daily (~9am US Eastern / 6am Pacific)
+    - cron: "0 14 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  run-sequence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Check replies, unsubscribes, bounces
+        env:
+          IMAP_HOST: imap.hostinger.com
+          IMAP_PORT: "993"
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+        run: python check_replies.py
+
+      - name: Send due sequence emails
+        env:
+          SMTP_HOST: smtp.hostinger.com
+          SMTP_PORT: "465"
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          FROM_NAME: "Jefferson"
+        run: python send_sequence.py
+
+      - name: Commit updated lead state
+        run: |
+          git config user.name "palmdesk-cold-email-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/leads.json
+          git diff --cached --quiet || git commit -m "Update lead sequence state [skip ci]"
+          git push

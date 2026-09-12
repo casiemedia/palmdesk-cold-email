@@ -318,8 +318,9 @@
     "last_name": "Chaudhary",
     "company_name": "tecHangouts LTD",
     "status": "active",
-    "step": 0,
-    "last_sent_at": null
+    "step": 1,
+    "last_sent_at": "2026-09-12T21:59:05.935851+00:00",
+    "thread_message_id": "<f0e10812-7eb7-4ac3-bf28-69648ca3d025@outreach.bloobeach.com>"
   },
   {
     "email": "matt@bakerssigns.com",

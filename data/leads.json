@@ -44,7 +44,7 @@
     "first_name": "Saradha",
     "last_name": "M.P",
     "company_name": "PENTOZ",
-    "status": "active",
+    "status": "bounced",
     "step": 1,
     "last_sent_at": "2026-09-12T16:52:44.659129+00:00",
     "thread_message_id": "<004d2f49-3d69-4c76-bd7a-27a50dd25cc5@outreach.bloobeach.com>"
@@ -234,7 +234,7 @@
     "first_name": "Aravind",
     "last_name": "K.",
     "company_name": "Rise Edge Inc",
-    "status": "active",
+    "status": "bounced",
     "step": 1,
     "last_sent_at": "2026-09-12T16:52:44.659129+00:00",
     "thread_message_id": "<503815c5-1380-4cc8-af16-93500703b925@outreach.bloobeach.com>"
@@ -290,8 +290,9 @@
     "last_name": "Patel",
     "company_name": "BRJU InfoSec Inc",
     "status": "active",
-    "step": 0,
-    "last_sent_at": null
+    "step": 1,
+    "last_sent_at": "2026-09-12T17:36:59.275995+00:00",
+    "thread_message_id": "<5b9bb023-b0c8-45a4-93dc-401224e730b7@outreach.bloobeach.com>"
   },
   {
     "email": "mazi.h@arshon.com",

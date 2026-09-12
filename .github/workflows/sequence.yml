@@ -1,15 +1,12 @@
 name: Cold email sequence
 
 on:
-  # PAUSED as of 2026-09-12: hello@outreach.bloobeach.com was suspended by
-  # Hostinger for spam-like sending after a 25-email burst in one run.
-  # send_sequence.py has since been hardened to send at most ONE email per
-  # invocation (during business hours only) with subject/body variants, so
-  # this schedule firing every 3 hours gives roughly 4 emails/day max instead
-  # of a burst. Do NOT uncomment the schedule below, and do not run this
-  # manually, until the Hostinger account has actually been reactivated.
-  # schedule:
-  #   - cron: "0 */3 * * *"
+  # Re-enabled 2026-09-12 after Hostinger reactivated the mailbox.
+  # send_sequence.py sends at most ONE email per invocation, gated to a
+  # business-hours window, with subject/body variants — so this firing every
+  # 3 hours gives roughly 4 emails/day max instead of a burst.
+  schedule:
+    - cron: "0 */3 * * *"
   workflow_dispatch: {}
 
 permissions:

@@ -1,12 +1,15 @@
 name: Cold email sequence
 
 on:
-  # Re-enabled 2026-09-12 after Hostinger reactivated the mailbox.
-  # send_sequence.py sends at most ONE email per invocation, gated to a
-  # business-hours window, with subject/body variants — so this firing every
-  # 3 hours gives roughly 4 emails/day max instead of a burst.
+  # Re-enabled 2026-09-12 after Hostinger reactivated the mailbox, then
+  # bumped to hourly the same day once the hardened (1-email-per-run,
+  # business-hours-gated) version was confirmed working.
+  # send_sequence.py sends at most ONE email per invocation, with subject/
+  # body variants — firing at the top of every hour from 13:00-22:00 UTC
+  # (matching its own BUSINESS_HOURS_UTC gate) gives ~10 emails/day max,
+  # spread across the whole workday instead of a burst.
   schedule:
-    - cron: "0 */3 * * *"
+    - cron: "0 13-22 * * *"
   workflow_dispatch: {}
 
 permissions:

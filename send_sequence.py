@@ -12,11 +12,13 @@ This version sends at most one email per invocation, only during a
 business-hours window, and picks from a few subject/body variants per step
 so it isn't the exact same template every time.
 """
+import imaplib
 import json
 import os
 import random
 import smtplib
 import sys
+import time
 import uuid
 from datetime import datetime, timezone
 from email.mime.text import MIMEText
@@ -28,6 +30,13 @@ SMTP_PORT = int(os.environ.get("SMTP_PORT", "465"))
 SMTP_USER = os.environ["SMTP_USER"]
 SMTP_PASS = os.environ["SMTP_PASS"]
 FROM_NAME = os.environ.get("FROM_NAME", "Jefferson")
+IMAP_HOST = os.environ.get("IMAP_HOST", "imap.hostinger.com")
+IMAP_PORT = int(os.environ.get("IMAP_PORT", "993"))
+
+# Hostinger/Titan's Sent folder name varies by mailbox setup; try each until
+# one accepts the APPEND. Best-effort only — a failure here never blocks the
+# actual send, since the email already went out via SMTP by that point.
+SENT_FOLDER_CANDIDATES = ["Sent", "INBOX.Sent", "Sent Items", "INBOX.Sent Items"]
 
 FOOTER = (
     "\n\nJefferson\n"
@@ -116,6 +125,26 @@ def due(lead, now):
     return (now - last_sent).days >= gap_days
 
 
+def save_to_sent(raw_message_bytes):
+    """Best-effort copy into the IMAP Sent folder. Raw SMTP submission (what
+    send_email uses) never does this on its own — a real mail client does it
+    as a separate step after sending, which is why nothing showed up in the
+    Sent view even though the emails genuinely went out."""
+    try:
+        imap = imaplib.IMAP4_SSL(IMAP_HOST, IMAP_PORT, timeout=30)
+        imap.login(SMTP_USER, SMTP_PASS)
+        internal_date = imaplib.Time2Internaldate(time.time())
+        for folder in SENT_FOLDER_CANDIDATES:
+            status, _ = imap.append(folder, r"(\Seen)", internal_date, raw_message_bytes)
+            if status == "OK":
+                imap.logout()
+                return folder
+        imap.logout()
+    except Exception as e:
+        print(f"WARNING: could not save a copy to Sent: {e}", file=sys.stderr, flush=True)
+    return None
+
+
 def send_email(lead, subject, body):
     msg = MIMEText(body, "plain", "utf-8")
     msg["Subject"] = subject
@@ -130,9 +159,17 @@ def send_email(lead, subject, body):
         msg["In-Reply-To"] = thread_id
         msg["References"] = thread_id
 
+    raw = msg.as_bytes()
     with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, timeout=30) as smtp:
         smtp.login(SMTP_USER, SMTP_PASS)
-        smtp.sendmail(SMTP_USER, [lead["email"]], msg.as_string())
+        smtp.sendmail(SMTP_USER, [lead["email"]], raw)
+
+    saved_to = save_to_sent(raw)
+    if saved_to:
+        print(f"Saved a copy to Sent folder '{saved_to}'", flush=True)
+    else:
+        print("Could not confirm a Sent-folder copy (see warning above, if any)", flush=True)
+
     return msg["Message-ID"]
 
 

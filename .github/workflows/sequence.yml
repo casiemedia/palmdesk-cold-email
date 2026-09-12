@@ -37,6 +37,8 @@ jobs:
         env:
           SMTP_HOST: smtp.hostinger.com
           SMTP_PORT: "465"
+          IMAP_HOST: imap.hostinger.com
+          IMAP_PORT: "993"
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           FROM_NAME: "Jefferson"

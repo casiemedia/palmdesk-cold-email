@@ -338,8 +338,9 @@
     "last_name": "Naved",
     "company_name": "8Cloud Technologies",
     "status": "active",
-    "step": 0,
-    "last_sent_at": null
+    "step": 1,
+    "last_sent_at": "2026-09-13T22:12:38.820461+00:00",
+    "thread_message_id": "<52bc2267-bbc7-4e5c-b0ed-fdb2faca4580@outreach.bloobeach.com>"
   },
   {
     "email": "mitchell.filby@first-rock.com",

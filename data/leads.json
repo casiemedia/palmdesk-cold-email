@@ -272,8 +272,9 @@
     "last_name": "Miller",
     "company_name": "Symbiosis.io",
     "status": "active",
-    "step": 0,
-    "last_sent_at": null
+    "step": 1,
+    "last_sent_at": "2026-09-13T19:13:52.785477+00:00",
+    "thread_message_id": "<f01dfae1-b145-4185-9c58-ad21145094ff@outreach.bloobeach.com>"
   },
   {
     "email": "wilson@juncyber.com",

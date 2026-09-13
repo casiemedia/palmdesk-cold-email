@@ -373,8 +373,9 @@
     "last_name": "",
     "company_name": "B-On",
     "status": "active",
-    "step": 0,
-    "last_sent_at": null
+    "step": 1,
+    "last_sent_at": "2026-09-13T16:52:32.134341+00:00",
+    "thread_message_id": "<a4704e07-a674-47bf-967a-e56c4434d2cb@outreach.bloobeach.com>"
   },
   {
     "email": "nadeem.khan@vidizmo.ai",

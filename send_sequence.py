@@ -237,6 +237,24 @@ def send_email(lead, subject, core_body):
 def main():
     now = datetime.now(timezone.utc)
 
+    test_email = os.environ.get("TEST_EMAIL", "").strip()
+    if test_email:
+        lead = {
+            "email": test_email,
+            "first_name": "there",
+            "company_name": "your company",
+            "step": 0,
+            "thread_message_id": None,
+        }
+        subject, body = step_content(0, lead)
+        try:
+            send_email(lead, subject, body)
+        except Exception as e:
+            print(f"TEST SEND FAILED to {test_email}: {e}", file=sys.stderr, flush=True)
+            raise
+        print(f"TEST MODE: sent a Step 0 preview to {test_email}. leads.json untouched.", flush=True)
+        return
+
     if now.hour not in BUSINESS_HOURS_UTC:
         print(f"Outside business-hours window (hour={now.hour} UTC). Skipping this run.")
         return

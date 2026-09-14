@@ -12,6 +12,7 @@ This version sends at most one email per invocation, only during a
 business-hours window, and picks from a few subject/body variants per step
 so it isn't the exact same template every time.
 """
+import html
 import imaplib
 import json
 import os
@@ -21,6 +22,7 @@ import sys
 import time
 import uuid
 from datetime import datetime, timezone
+from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 LEADS_PATH = os.path.join(os.path.dirname(__file__), "data", "leads.json")
@@ -43,6 +45,50 @@ FOOTER = (
     "PalmDesk | 1309 Coffeen Avenue STE 1200, Sheridan, WY 82801, USA\n"
     "Don't want these? Reply \"unsubscribe\"."
 )
+
+FOOTER_HTML = (
+    '<p style="font-size:12px;color:#64748b;margin:18px 0 0 0;">'
+    "PalmDesk | 1309 Coffeen Avenue STE 1200, Sheridan, WY 82801, USA<br>"
+    'Don\'t want these? Reply "unsubscribe".</p>'
+)
+
+SIGNATURE_HTML = """
+<div>
+  <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;max-width:520px;">
+    <tbody>
+      <tr>
+        <td valign="top" style="padding:0 18px 0 0;border-right:3px solid #2563eb;">
+          <img src="https://bdcixrpgobzghcilclek.supabase.co/storage/v1/object/public/assets/palmdesk_logo.png" alt="PalmDesk" width="96" height="96" style="display:block;width:96px;height:96px;object-fit:contain;">
+          <br>
+        </td>
+        <td valign="top" style="padding:0 0 0 18px;">
+          <div style="font-size:16px;font-weight:bold;color:#0f172a;line-height:1.3;">Jefferson Geerman</div>
+          <div style="font-size:13px;color:#2563eb;font-weight:bold;letter-spacing:.3px;margin-top:1px;">Founder, PalmDesk</div>
+          <div style="font-size:12px;color:#64748b;margin-top:2px;">Bloo Beach Softwares LLC</div>
+          <div style="margin:10px 0 0 0;font-size:12px;color:#0f172a;line-height:1.8;">
+            <div>
+              <a href="mailto:palmdesk@bloobeach.com" style="color:#0f172a;text-decoration:none;">
+                <span style="color:#2563eb;">&#9993;</span>
+                 &nbsp;palmdesk@bloobeach.com
+              </a>
+            </div>
+            <div>
+              <span style="color:#2563eb;">&#9742;</span>
+               &nbsp;1-409-934-7648
+            </div>
+            <div>
+              <a href="https://palmdesk.me" style="color:#2563eb;text-decoration:underline;font-weight:bold;">
+                <span style="color:#2563eb;">&#127760;</span>
+                 &nbsp;palmdesk.me
+              </a>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+"""
 
 TRIAL_LINK = "https://dashboard.palmdesk.me/signup"
 
@@ -109,7 +155,7 @@ def step_content(step, lead):
     subject_t, body_t = random.choice(variants)
     subject = subject_t.format(company=company)
     body = body_t.format(first=first, company=company, trial_link=TRIAL_LINK)
-    return subject, body + FOOTER
+    return subject, body
 
 
 def due(lead, now):
@@ -145,8 +191,17 @@ def save_to_sent(raw_message_bytes):
     return None
 
 
-def send_email(lead, subject, body):
-    msg = MIMEText(body, "plain", "utf-8")
+def send_email(lead, subject, core_body):
+    plain_body = core_body + FOOTER
+    html_body = (
+        '<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#0f172a;">'
+        f"<p>{html.escape(core_body).replace(chr(10), '<br>' + chr(10))}</p>"
+        f"{FOOTER_HTML}"
+        f'<div style="margin-top:18px;">{SIGNATURE_HTML}</div>'
+        "</div>"
+    )
+
+    msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
     msg["From"] = f"{FROM_NAME} <{SMTP_USER}>"
     msg["To"] = lead["email"]
@@ -158,6 +213,9 @@ def send_email(lead, subject, body):
     if thread_id and lead["step"] > 0:
         msg["In-Reply-To"] = thread_id
         msg["References"] = thread_id
+
+    msg.attach(MIMEText(plain_body, "plain", "utf-8"))
+    msg.attach(MIMEText(html_body, "html", "utf-8"))
 
     raw = msg.as_bytes()
     with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, timeout=30) as smtp:

@@ -272,8 +272,9 @@
     "last_name": "Miller",
     "company_name": "Symbiosis.io",
     "status": "active",
-    "step": 0,
-    "last_sent_at": null
+    "step": 1,
+    "last_sent_at": "2026-09-13T19:13:52.785477+00:00",
+    "thread_message_id": "<f01dfae1-b145-4185-9c58-ad21145094ff@outreach.bloobeach.com>"
   },
   {
     "email": "wilson@juncyber.com",
@@ -318,8 +319,9 @@
     "last_name": "Chaudhary",
     "company_name": "tecHangouts LTD",
     "status": "active",
-    "step": 0,
-    "last_sent_at": null
+    "step": 1,
+    "last_sent_at": "2026-09-12T21:59:05.935851+00:00",
+    "thread_message_id": "<f0e10812-7eb7-4ac3-bf28-69648ca3d025@outreach.bloobeach.com>"
   },
   {
     "email": "matt@bakerssigns.com",
@@ -336,8 +338,9 @@
     "last_name": "Naved",
     "company_name": "8Cloud Technologies",
     "status": "active",
-    "step": 0,
-    "last_sent_at": null
+    "step": 1,
+    "last_sent_at": "2026-09-13T22:12:38.820461+00:00",
+    "thread_message_id": "<52bc2267-bbc7-4e5c-b0ed-fdb2faca4580@outreach.bloobeach.com>"
   },
   {
     "email": "mitchell.filby@first-rock.com",
@@ -372,8 +375,9 @@
     "last_name": "",
     "company_name": "B-On",
     "status": "active",
-    "step": 0,
-    "last_sent_at": null
+    "step": 1,
+    "last_sent_at": "2026-09-13T16:52:32.134341+00:00",
+    "thread_message_id": "<a4704e07-a674-47bf-967a-e56c4434d2cb@outreach.bloobeach.com>"
   },
   {
     "email": "nadeem.khan@vidizmo.ai",

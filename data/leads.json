@@ -311,8 +311,9 @@
     "last_name": "P.",
     "company_name": "NP Tech Solutions Limited",
     "status": "active",
-    "step": 0,
-    "last_sent_at": null
+    "step": 1,
+    "last_sent_at": "2026-09-14T22:19:46.881497+00:00",
+    "thread_message_id": "<ebc19fca-cc8e-4814-8491-6155e3b56ee1@outreach.bloobeach.com>"
   },
   {
     "email": "ajay.chaudhary@apptechies.com",

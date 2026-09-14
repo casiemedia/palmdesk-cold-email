@@ -12,7 +12,6 @@ This version sends at most one email per invocation, only during a
 business-hours window, and picks from a few subject/body variants per step
 so it isn't the exact same template every time.
 """
-import html
 import imaplib
 import json
 import os
@@ -22,7 +21,6 @@ import sys
 import time
 import uuid
 from datetime import datetime, timezone
-from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 LEADS_PATH = os.path.join(os.path.dirname(__file__), "data", "leads.json")
@@ -41,32 +39,13 @@ IMAP_PORT = int(os.environ.get("IMAP_PORT", "993"))
 SENT_FOLDER_CANDIDATES = ["Sent", "INBOX.Sent", "Sent Items", "INBOX.Sent Items"]
 
 FOOTER = (
-    "\n\nJefferson\n"
+    "\n\n"
     "I hope to hear from you soon. If these emails are out of line, let me "
-    "know by replying \"stop\".\n"
+    "know by replying \"stop\".\n\n"
+    "Jefferson Geerman\n"
+    "Founder, PalmDesk | Bloo Beach Softwares LLC\n"
+    "palmdesk@bloobeach.com | 1-409-934-7648 | palmdesk.me\n"
     "PalmDesk, 1309 Coffeen Avenue STE 1200, Sheridan, WY 82801, USA"
-)
-
-FOOTER_HTML = (
-    '<p style="font-size:12px;color:#64748b;margin:18px 0 0 0;line-height:1.6;">'
-    'I hope to hear from you soon. If these emails are out of line, let me '
-    'know by replying "stop".'
-    '<br><span style="font-size:10px;color:#94a3b8;">'
-    "PalmDesk, 1309 Coffeen Avenue STE 1200, Sheridan, WY 82801, USA</span></p>"
-)
-
-SIGNATURE_HTML = (
-    '<div style="font-family:Arial,Helvetica,sans-serif;font-size:13px;'
-    'color:#0f172a;line-height:1.6;">'
-    '<div style="font-weight:bold;">Jefferson Geerman</div>'
-    "<div>Founder, PalmDesk | Bloo Beach Softwares LLC</div>"
-    "<div>"
-    '<a href="mailto:palmdesk@bloobeach.com" style="color:inherit;">'
-    "palmdesk@bloobeach.com</a> &nbsp;|&nbsp; "
-    "1-409-934-7648 &nbsp;|&nbsp; "
-    '<a href="https://palmdesk.me" style="color:inherit;">palmdesk.me</a>'
-    "</div>"
-    "</div>"
 )
 
 STEP_DELAYS_DAYS = [0, 4, 5]  # delay BEFORE sending this step, counted from previous send
@@ -171,29 +150,17 @@ def save_to_sent(raw_message_bytes):
 
 def send_email(lead, subject, core_body):
     plain_body = core_body + FOOTER
-    html_body = (
-        '<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#0f172a;">'
-        f"<p>{html.escape(core_body).replace(chr(10), '<br>' + chr(10))}</p>"
-        f"{FOOTER_HTML}"
-        f'<div style="margin-top:18px;">{SIGNATURE_HTML}</div>'
-        "</div>"
-    )
 
-    msg = MIMEMultipart("alternative")
+    msg = MIMEText(plain_body, "plain", "utf-8")
     msg["Subject"] = subject
     msg["From"] = f"{FROM_NAME} <{SMTP_USER}>"
     msg["To"] = lead["email"]
     msg["Message-ID"] = f"<{uuid.uuid4()}@outreach.bloobeach.com>"
-    msg["List-Unsubscribe"] = f"<mailto:{SMTP_USER}?subject=unsubscribe>"
-    msg["List-Unsubscribe-Post"] = "List-Unsubscribe=One-Click"
 
     thread_id = lead.get("thread_message_id")
     if thread_id and lead["step"] > 0:
         msg["In-Reply-To"] = thread_id
         msg["References"] = thread_id
-
-    msg.attach(MIMEText(plain_body, "plain", "utf-8"))
-    msg.attach(MIMEText(html_body, "html", "utf-8"))
 
     raw = msg.as_bytes()
     with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, timeout=30) as smtp:

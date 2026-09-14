@@ -5,7 +5,7 @@ on:
   # bumped to hourly the same day once the hardened (1-email-per-run,
   # business-hours-gated) version was confirmed working.
   # send_sequence.py sends at most ONE email per invocation, with subject/
-  # body variants — firing at the top of every hour from 13:00-22:00 UTC
+  # body variants; firing at the top of every hour from 13:00-22:00 UTC
   # (matching its own BUSINESS_HOURS_UTC gate) gives ~10 emails/day max,
   # spread across the whole workday instead of a burst.
   schedule:

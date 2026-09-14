@@ -1,6 +1,6 @@
 """
 Sends the PalmDesk cold-outreach sequence to leads in data/leads.json.
-Run every few hours via GitHub Actions, but only sends ONE email per run —
+Run every few hours via GitHub Actions, but only sends ONE email per run;
 volume comes from how often the workflow fires, not from looping inside the
 script. Uses only the standard library.
 
@@ -36,20 +36,23 @@ IMAP_HOST = os.environ.get("IMAP_HOST", "imap.hostinger.com")
 IMAP_PORT = int(os.environ.get("IMAP_PORT", "993"))
 
 # Hostinger/Titan's Sent folder name varies by mailbox setup; try each until
-# one accepts the APPEND. Best-effort only — a failure here never blocks the
+# one accepts the APPEND. Best-effort only; a failure here never blocks the
 # actual send, since the email already went out via SMTP by that point.
 SENT_FOLDER_CANDIDATES = ["Sent", "INBOX.Sent", "Sent Items", "INBOX.Sent Items"]
 
 FOOTER = (
     "\n\nJefferson\n"
-    "PalmDesk | 1309 Coffeen Avenue STE 1200, Sheridan, WY 82801, USA\n"
-    "Don't want these? Reply \"unsubscribe\"."
+    "I hope to hear from you soon. If these emails are out of line, let me "
+    "know by replying \"stop\".\n"
+    "PalmDesk, 1309 Coffeen Avenue STE 1200, Sheridan, WY 82801, USA"
 )
 
 FOOTER_HTML = (
-    '<p style="font-size:12px;color:#64748b;margin:18px 0 0 0;">'
-    "PalmDesk | 1309 Coffeen Avenue STE 1200, Sheridan, WY 82801, USA<br>"
-    'Don\'t want these? Reply "unsubscribe".</p>'
+    '<p style="font-size:12px;color:#64748b;margin:18px 0 0 0;line-height:1.6;">'
+    'I hope to hear from you soon. If these emails are out of line, let me '
+    'know by replying "stop".'
+    '<br><span style="font-size:10px;color:#94a3b8;">'
+    "PalmDesk, 1309 Coffeen Avenue STE 1200, Sheridan, WY 82801, USA</span></p>"
 )
 
 SIGNATURE_HTML = """
@@ -98,15 +101,15 @@ BUSINESS_HOURS_UTC = range(13, 23)  # ~8am-6pm US Eastern; skip nights entirely
 STEP0_VARIANTS = [
     (
         "quick q about {company}'s work orders",
-        "Hey {first} — noticed {company} has techs out in the field. Curious how "
+        "Hey {first}, I noticed {company} has techs out in the field. Curious how "
         "you're currently handling work orders and getting them back to the "
-        "office — spreadsheet, paper, something else?\n\n"
+        "office: spreadsheet, paper, something else?\n\n"
         "We built PalmDesk to take that whole loop (ticket, dispatch, signed "
         "work order, client) down to a few taps for the tech. Worth a 15-min look?",
     ),
     (
         "how does {company} handle work orders today?",
-        "Hi {first} — quick one: when a tech at {company} finishes a job, how "
+        "Hi {first}, quick one: when a tech at {company} finishes a job, how "
         "does the paperwork get back to the office? Still spreadsheets or paper?\n\n"
         "We built PalmDesk so techs can dispatch, log the job, and get a signed "
         "work order out to the client in a few taps. Open to a quick look?",
@@ -116,7 +119,7 @@ STEP0_VARIANTS = [
 STEP1_VARIANTS = [
     (
         "Re: quick q about {company}'s work orders",
-        "Following up — one thing that seems to matter most to teams like "
+        "Following up, one thing that seems to matter most to teams like "
         "{company}'s is the client-facing side: techs generate a branded, "
         "signed work-order PDF on-site and it emails itself. No re-typing "
         "anything back at the office.\n\n"
@@ -124,7 +127,7 @@ STEP1_VARIANTS = [
     ),
     (
         "Re: how does {company} handle work orders today?",
-        "Circling back on this — the part that usually lands well for teams "
+        "Circling back on this, the part that usually lands well for teams "
         "like {company}'s is that the client gets a branded, signed work order "
         "by email the moment the tech finishes, no office re-entry needed.\n\n"
         "If a call's easier than reading, happy to just send a short video instead.",
@@ -134,7 +137,7 @@ STEP1_VARIANTS = [
 STEP2_VARIANTS = [
     (
         "should I close this out?",
-        "No worries if the timing's off — I'll stop following up. If it's ever "
+        "No worries if the timing's off, I'll stop following up. If it's ever "
         "useful, PalmDesk's free to try for 5 seats, no card needed: {trial_link}",
     ),
     (
@@ -173,7 +176,7 @@ def due(lead, now):
 
 def save_to_sent(raw_message_bytes):
     """Best-effort copy into the IMAP Sent folder. Raw SMTP submission (what
-    send_email uses) never does this on its own — a real mail client does it
+    send_email uses) never does this on its own; a real mail client does it
     as a separate step after sending, which is why nothing showed up in the
     Sent view even though the emails genuinely went out."""
     try:

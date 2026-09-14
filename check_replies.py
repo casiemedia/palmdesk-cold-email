@@ -17,7 +17,7 @@ IMAP_PORT = int(os.environ.get("IMAP_PORT", "993"))
 IMAP_USER = os.environ["SMTP_USER"]
 IMAP_PASS = os.environ["SMTP_PASS"]
 
-UNSUBSCRIBE_RE = re.compile(r"unsubscribe|stop emailing|remove me", re.IGNORECASE)
+UNSUBSCRIBE_RE = re.compile(r"unsubscribe|stop emailing|remove me|\bstop\b", re.IGNORECASE)
 BOUNCE_SENDER_RE = re.compile(r"mailer-daemon|postmaster|mail delivery", re.IGNORECASE)
 
 

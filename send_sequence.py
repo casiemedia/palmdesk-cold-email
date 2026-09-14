@@ -53,52 +53,62 @@ BUSINESS_HOURS_UTC = range(13, 23)  # ~8am-6pm US Eastern; skip nights entirely
 
 STEP0_VARIANTS = [
     (
-        "quick q about {company}'s work orders",
-        "Hey {first}, I noticed {company} has techs out in the field. Curious how "
-        "you're currently handling work orders and getting them back to the "
-        "office: spreadsheet, paper, something else?\n\n"
-        "We built PalmDesk to take that whole loop (ticket, dispatch, signed "
-        "work order, client) down to a few taps for the tech. Worth a quick "
-        "15-min call to see if it's a fit?",
+        "how does {company} handle work orders today?",
+        "Hi {first},\n\n"
+        "Quick one: when a tech at {company} finishes a job, how does the "
+        "paperwork get back to the office? Still spreadsheets, paper, or "
+        "something else?\n\n"
+        "I'm working on PalmDesk, a field service management platform, and "
+        "I'm reaching out to businesses like yours to learn how they handle "
+        "dispatching and job tracking. We're trying to understand what "
+        "works, what doesn't, and what we could do better.\n\n"
+        "Would you be open to a quick chat this week? I'd love to hear how "
+        "you handle things on your end.",
     ),
     (
-        "how does {company} handle work orders today?",
-        "Hi {first}, quick one: when a tech at {company} finishes a job, how "
-        "does the paperwork get back to the office? Still spreadsheets or paper?\n\n"
-        "We built PalmDesk so techs can dispatch, log the job, and get a signed "
-        "work order out to the client in a few taps. Open to a quick call this week?",
+        "quick q about {company}'s work orders",
+        "Hi {first},\n\n"
+        "I noticed {company} has techs out in the field, so curious how "
+        "you're currently handling dispatching and getting paperwork back "
+        "to the office: spreadsheet, paper, something else?\n\n"
+        "I'm building PalmDesk, a field service management platform, and "
+        "I'm talking to teams like yours to understand how this actually "
+        "works day to day, what's painful, and what's fine as-is.\n\n"
+        "Would you be open to a quick call this week? I'd really value "
+        "hearing how you do it.",
     ),
 ]
 
 STEP1_VARIANTS = [
     (
-        "Re: quick q about {company}'s work orders",
-        "Following up, one thing that seems to matter most to teams like "
-        "{company}'s is the client-facing side: techs generate a branded, "
-        "signed work-order PDF on-site and it emails itself. No re-typing "
-        "anything back at the office.\n\n"
-        "Happy to send a 2-min video instead of a call if that's easier.",
+        "Re: how does {company} handle work orders today?",
+        "Following up on this, still curious how {company} handles the "
+        "handoff once a job wraps up. Most of the teams I've talked to end "
+        "up re-typing the same info back at the office.\n\n"
+        "If you've got 15 minutes this week, I'd love to hear how you do it "
+        "and share what I'm learning from other teams.",
     ),
     (
-        "Re: how does {company} handle work orders today?",
-        "Circling back on this, the part that usually lands well for teams "
-        "like {company}'s is that the client gets a branded, signed work order "
-        "by email the moment the tech finishes, no office re-entry needed.\n\n"
-        "If a call's easier than reading, happy to just send a short video instead.",
+        "Re: quick q about {company}'s work orders",
+        "Circling back, still hoping to hear how {company} handles job "
+        "paperwork day to day. Most of what I'm learning right now is from "
+        "conversations like this one.\n\n"
+        "Open to a quick call sometime this week?",
     ),
 ]
 
 STEP2_VARIANTS = [
     (
         "should I close this out?",
-        "No worries if the timing's off, I'll stop following up. If a quick "
-        "15-minute call ever makes sense, just reply with a good time and "
-        "I'll work around your schedule.",
+        "No worries if the timing's off, I'll stop following up. If it's "
+        "ever useful to trade notes on how {company} handles dispatching, "
+        "just reply and we'll grab 15 minutes.",
     ),
     (
         "last note from me",
-        "I'll leave it here so I'm not cluttering your inbox. If it's ever "
-        "useful to grab 15 minutes, just reply and we'll find a time that works.",
+        "I'll leave it here so I'm not cluttering your inbox. If you're "
+        "ever up for a quick chat about how {company} handles job "
+        "tracking, just reply and we'll find a time.",
     ),
 ]
 

@@ -69,8 +69,6 @@ SIGNATURE_HTML = (
     "</div>"
 )
 
-TRIAL_LINK = "https://dashboard.palmdesk.me/signup"
-
 STEP_DELAYS_DAYS = [0, 4, 5]  # delay BEFORE sending this step, counted from previous send
 BUSINESS_HOURS_UTC = range(13, 23)  # ~8am-6pm US Eastern; skip nights entirely
 
@@ -81,14 +79,15 @@ STEP0_VARIANTS = [
         "you're currently handling work orders and getting them back to the "
         "office: spreadsheet, paper, something else?\n\n"
         "We built PalmDesk to take that whole loop (ticket, dispatch, signed "
-        "work order, client) down to a few taps for the tech. Worth a 15-min look?",
+        "work order, client) down to a few taps for the tech. Worth a quick "
+        "15-min call to see if it's a fit?",
     ),
     (
         "how does {company} handle work orders today?",
         "Hi {first}, quick one: when a tech at {company} finishes a job, how "
         "does the paperwork get back to the office? Still spreadsheets or paper?\n\n"
         "We built PalmDesk so techs can dispatch, log the job, and get a signed "
-        "work order out to the client in a few taps. Open to a quick look?",
+        "work order out to the client in a few taps. Open to a quick call this week?",
     ),
 ]
 
@@ -113,14 +112,14 @@ STEP1_VARIANTS = [
 STEP2_VARIANTS = [
     (
         "should I close this out?",
-        "No worries if the timing's off, I'll stop following up. If it's ever "
-        "useful, PalmDesk's free to try for 5 seats, no card needed: {trial_link}",
+        "No worries if the timing's off, I'll stop following up. If a quick "
+        "15-minute call ever makes sense, just reply with a good time and "
+        "I'll work around your schedule.",
     ),
     (
         "last note from me",
-        "I'll leave it here so I'm not cluttering your inbox. If this ever "
-        "becomes useful, PalmDesk's free to try for 5 seats, no card needed: "
-        "{trial_link}",
+        "I'll leave it here so I'm not cluttering your inbox. If it's ever "
+        "useful to grab 15 minutes, just reply and we'll find a time that works.",
     ),
 ]
 
@@ -133,7 +132,7 @@ def step_content(step, lead):
         return None, None
     subject_t, body_t = random.choice(variants)
     subject = subject_t.format(company=company)
-    body = body_t.format(first=first, company=company, trial_link=TRIAL_LINK)
+    body = body_t.format(first=first, company=company)
     return subject, body
 
 

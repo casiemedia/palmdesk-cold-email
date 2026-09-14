@@ -282,8 +282,9 @@
     "last_name": "Bautista Jr. MBA, MSISM, CISSP, PMP, CMMC Lead CCA",
     "company_name": "J\u00fcn Cyber",
     "status": "active",
-    "step": 0,
-    "last_sent_at": null
+    "step": 1,
+    "last_sent_at": "2026-09-14T18:24:52.609574+00:00",
+    "thread_message_id": "<3ad84a1b-dbbd-4598-acb0-05a42a5aabb3@outreach.bloobeach.com>"
   },
   {
     "email": "rakesh@brjuinfosec.com",

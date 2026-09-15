@@ -263,8 +263,9 @@
     "last_name": "Bazen",
     "company_name": "Tech Advisor Services",
     "status": "active",
-    "step": 0,
-    "last_sent_at": null
+    "step": 1,
+    "last_sent_at": "2026-09-15T20:58:29.769868+00:00",
+    "thread_message_id": "<f5148e67-874e-48ab-a8d9-394aa1041d00@outreach.bloobeach.com>"
   },
   {
     "email": "scott.miller@symbiosis-io.com",

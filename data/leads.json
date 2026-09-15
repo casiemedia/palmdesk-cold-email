@@ -368,8 +368,9 @@
     "last_name": "Ansari",
     "company_name": "Fugetron Corp",
     "status": "active",
-    "step": 0,
-    "last_sent_at": null
+    "step": 1,
+    "last_sent_at": "2026-09-15T17:31:51.320159+00:00",
+    "thread_message_id": "<4ab65c39-48ca-4b1c-82a2-916b1efe7559@outreach.bloobeach.com>"
   },
   {
     "email": "rajeev@bongroup.org",

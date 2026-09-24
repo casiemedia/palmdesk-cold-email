@@ -303,8 +303,9 @@
     "last_name": "Hosseini",
     "company_name": "Arshon Technology Inc.",
     "status": "active",
-    "step": 0,
-    "last_sent_at": null
+    "step": 1,
+    "last_sent_at": "2026-09-24T17:46:56.807972+00:00",
+    "thread_message_id": "<3ac1917a-1450-4006-9020-1b22494ef194@outreach.bloobeach.com>"
   },
   {
     "email": "namrata@nptechsol.com",

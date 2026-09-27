@@ -254,8 +254,9 @@
     "last_name": "Rao",
     "company_name": "Vyts, Inc",
     "status": "active",
-    "step": 0,
-    "last_sent_at": null
+    "step": 1,
+    "last_sent_at": "2026-09-27T21:03:13.224694+00:00",
+    "thread_message_id": "<46d43219-5397-4d0e-a71a-1f84fb3c70e8@outreach.bloobeach.com>"
   },
   {
     "email": "bbazen@techadvisorservices.com",

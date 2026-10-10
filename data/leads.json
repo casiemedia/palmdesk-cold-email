@@ -354,8 +354,9 @@
     "last_name": "Filby",
     "company_name": "First Rock Consulting",
     "status": "active",
-    "step": 0,
-    "last_sent_at": null
+    "step": 1,
+    "last_sent_at": "2026-10-10T21:18:26.390895+00:00",
+    "thread_message_id": "<778084e5-e61b-4601-a4ea-23ae2dca4af9@outreach.bloobeach.com>"
   },
   {
     "email": "abhilash@urolime.com",

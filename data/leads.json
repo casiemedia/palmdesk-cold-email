@@ -245,8 +245,9 @@
     "last_name": "Coleman",
     "company_name": "Roebuck Technologies",
     "status": "active",
-    "step": 0,
-    "last_sent_at": null
+    "step": 1,
+    "last_sent_at": "2026-10-15T21:03:01.311641+00:00",
+    "thread_message_id": "<f253dc9f-bf7a-4c24-8773-23e8b5bf3667@outreach.bloobeach.com>"
   },
   {
     "email": "vishy.rao@vytsinc.com",
